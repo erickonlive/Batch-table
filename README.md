@@ -1,2 +1,2 @@
-# Hello-world
-A sample repository 
+# In progress
+A shitti batch project 
