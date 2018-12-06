@@ -1,9 +1,19 @@
+::App echa por Erick4kun
 @ECHO off
-SET "B=%random%"
+Echo.Cargando...
+color %random:~0,1%
+SET "B=%random:~0,9%"
+mode 34,6
 SET "EID=100000000000000"
 SET "P=Main\fn.dll sprite"
+setlocal enabledelayedexpansion enableextensions
+IF EXIST main\nircmd.exe (SET nir=main\nircmd infobox) ELSE (SET "nir=ECHO. ")
+IF EXIST main\fart.exe (goto down) ELSE (%NIR% "Falta Fart.exe, El programa no se puede ejecutar" "Error 5")
+IF EXIST main\fn.dll (goto ill) ELSE (%NIR% "Falta fn.dll, El programa no se puede ejecutar" "Error 3")
+pause>nul
+exit
 main\fn.dll font 8
-mode 48,15
+
 %P% 0 20 C "!Atencion!"
 %P% 3 0 C "Para el correcto funcionamiento de la aplicacion"
 %P% 5 7 C "Cambie el idioma de su"&%P% 5 30 9F "facebook"
@@ -13,23 +23,25 @@ pause>nul
 mode 34,6
 SET /a vare=0 + 0
 setlocal enabledelayedexpansion enableextensions
-main\fn.dll font 7
-IF EXIST main\nircmd.exe (SET "nir=main\nircmd infobox") ELSE (SET "nir=ECHO. ")
-IF EXIST main\fart.exe (goto down) ELSE (!NIR! "Falta Fart.exe, El programa no se puede ejecutar" "Error 5")
+IF EXIST main\nircmd.exe (SET nir=main\nircmd infobox) ELSE (SET "nir=ECHO. ")
+IF EXIST main\fart.exe (goto down) ELSE (%NIR% "Falta Fart.exe, El programa no se puede ejecutar" "Error 5")
+IF EXIST main\fn.dll (goto ill) ELSE (%NIR% "Falta fn.dll, El programa no se puede ejecutar" "Error 3")
 pause>nul
 exit
 :down
-IF EXIST main\fn.dll (goto ill) ELSE (!NIR! "Falta fn.dll, El programa no se puede ejecutar" "Error 3")
+main\fn.dll font 7
+IF EXIST main\fn.dll (goto ill) ELSE (%NIR% "Falta fn.dll, El programa no se puede ejecutar" "Error 3")
 exit
 :ill
 Title F-Viewer - !UN!
 
 main\fn.dll cursor 0
 :menu
+cls
 endlocal
 setlocal enabledelayedexpansion enableextensions
 cls
-color A
+color %random:~0,1%
 !P! 01 06 !B! "Buscar por ID"
 !P! 02 06 !B! "Buscar todos los post"
 !P! 03 06 !B! "Obtener ID unico"
@@ -57,12 +69,12 @@ SET /p dol=-
 if /i "!dol!"=="1" Goto ID1
 if /i "!dol!"=="2" Goto EX
 if /i "!dol!"=="3" Goto graph
-if /i "!dol!"=="" !NIR! "Este campo no puede estar vacio" "Error"&goto menu
-if /i "!dol!"=="!dol!" !NIR! "Opcion invalida" "Error"
+if /i "!dol!"=="" %NIR% "Este campo no puede estar vacio" "Error"&goto menu
+if /i "!dol!"=="!dol!" %NIR% "Opcion invalida" "Error"
 goto menu
 :ID1
 cls
-color F
+color %random:~0,1%
 !P! 01 06 !B! "ID previamente guardado"
 !P! 02 06 !B! "Ingresar ID"
 !P! 03 06 !B! "Regresar"
@@ -90,9 +102,9 @@ ECHO.
 SET /p VARL=:
 if /i "!VARL!"=="1" (goto ttre)
 if /i "!VARL!"=="2" (goto SETid)
-if /i "!VARL!"=="" !NIR! "Este campo no puede estar vacio" "Error"&goto menu
+if /i "!VARL!"=="" %NIR% "Este campo no puede estar vacio" "Error"&goto menu
 if /i "!VARL!"=="3" cls&goto menu
-if /i "!VARL!"=="!VARL!" !NIR! "Opcion invalida" "Error"
+if /i "!VARL!"=="!VARL!" %NIR% "Opcion invalida" "Error"
 :ttre
 cls
 ECHO Nombre del ID guardado:
@@ -103,6 +115,7 @@ cls
 cls
 ECHO Escriba el ID
 SET /p ID=:
+IF !ID! LSS 100000000000000 nircmd infobox "ID incorrecto" "Error" &goto setid
 :ID2
 Title F-Viewer - !IDV!
 cls
@@ -130,7 +143,9 @@ if !vares!==15 (goto ru2) ELSE (goto ru2)
 :ru2
 if !vare!==49 (goto men2) ELSE (goto xy)
 :men2
+If exist PSN\!UN!.bat (set Diag=!UN! ha desactivado su cuenta) else (set Diag=No se ha encontrado el usuario)
 cls
+title !UN!
 ECHO ------------------------------------------------
 ECHO -1 Fotos de                                    -
 ECHO -2 Fotos por                                   -
@@ -164,8 +179,8 @@ if /i "!OP!"=="8" start !LMP!&goto ID2
 if /i "!OP!"=="GETP" goto wget
 if /i "!OP!"=="SVP" goto svprofrile
 if /i "!OP!"=="12" goto resuse
-if /i "!OP!"=="" !NIR! "Porfavor escoje una opcion antes de precionar enter" "Error"&goto ID2
-if /i "!OP!"=="!OP!" !nir! "Opcion invalida" "Error"&goto ID2
+if /i "!OP!"=="" main\nircmd infobox "Porfavor escoje una opcion antes de precionar enter" "Error"&goto ID2
+if /i "!OP!"=="!OP!" main\nircmd infobox "Opcion invalida" "Error"&goto ID2
 :FS
 cls
 ECHO escriba el id o el nombre de usuario de la segunda persona:
@@ -190,7 +205,6 @@ ECHO guardando perfil...
 ECHO.@ECHO off
 ECHO.SET "UN=!UN!"
 ECHO.SET "ID=!ID!"
-ECHO.SET "UN=!UN!"
 ECHO.goto men2
 )>PSN\!UN!.bat
 goto men2
@@ -243,7 +257,7 @@ cls
 ECHO Obteniendo informacion de !UN! 
 main\wget -o log.x00 graph.facebook.com/!UN! >NUL 2>NUL
 Title F-Viewer - !UN!
-IF EXIST !UN! (type !UN!&goto 3) ELSE (!nir! "A ocurrido un error, estas conectado a internet?" "Error 6"&goto men3)
+IF EXIST !UN! (type !UN!&goto 3) ELSE (%NIR% "A ocurrido un error, estas conectado a internet?" "Error 6"&goto men3)
 :3
 !P! 05 10 F "Escriba los numeros que estan entre comillas "
 SET /p ID=Escriba el ID que se muestra arriba:
@@ -280,10 +294,10 @@ ECHO Espera...
 IF NOT EXIST foto md foto
 IF NOT EXIST FOTO\!UN! MD FOTO\!UN!
 main\wget -r -c -k -nd --no-check-certificate graph.facebook.com/!ID!/picture?width=10000000 >NUL 2>NUL
-ren *.JPG@OH* !UN!~%B%.jpg >NUL 2>NUL
+ren *.JPG@* !UN!~%B%.jpg >NUL 2>NUL
 move /y *.jpg* foto\!UN!\ >NUL 2>NUL
-IF EXIST UlIqmHJn-SK.gif del UlIqmHJn-SK.gif & NIRCMD INFOBOX "El usuario no existe o ha desactivado su cuenta" "Error"&goto menu
-IF NOT EXIST foto\!UN!\!UN!~%B%.jpg NIRCMD INFOBOX "No se ha podido conectar." "Error de red"&goto men2
+IF EXIST UlIqmHJn-SK.gif del UlIqmHJn-SK.gif &NIRCMD INFOBOX "!DIAG!" "Error" & goto men2
+IF NOT EXIST foto\!UN!\!UN!~%B%.jpg NIRCMD INFOBOX "No se ha podido conectar." "Error de red"&title F-Viewer - !UN!& goto menu
 start foto\!UN!\!UN!~%B%.jpg
 Title F-Viewer - !UN!
 goto men2
